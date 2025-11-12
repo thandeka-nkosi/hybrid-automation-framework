@@ -1,0 +1,90 @@
+version: "3.8"
+
+services:
+  chrome:
+    image: selenium/standalone-chrome:4.20.0
+    container_name: selenium-chrome
+    shm_size: "2g"
+    ports:
+      - "4444:4444"
+    environment:
+      - TZ=Africa/Johannesburg
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsSL http://localhost:4444/status | grep -q '\"ready\": true'"]
+      interval: 3s
+      timeout: 2s
+      retries: 40
+
+  edge:
+    image: selenium/standalone-edge:4.20.0
+    container_name: selenium-edge
+    shm_size: "2g"
+    ports:
+      - "4445:4444"
+    environment:
+      - TZ=Africa/Johannesburg
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsSL http://localhost:4444/status | grep -q '\"ready\": true'"]
+      interval: 3s
+      timeout: 2s
+      retries: 40
+
+  test-runner-chrome:
+    image: maven:3.9.6-eclipse-temurin-17
+    container_name: ui-tests-runner-chrome
+    depends_on:
+      chrome:
+        condition: service_healthy
+    working_dir: /workspace
+    environment:
+      - TZ=Africa/Johannesburg
+    volumes:
+      - ./:/workspace
+      - ~/.m2:/root/.m2
+    command:
+      - sh
+      - -lc
+      - |
+        set -e
+        echo '▶ Running tests on Chrome Grid'
+        mvn -pl ui-tests -am \
+          -Dbrowser=chrome \
+          -DgridUrl=http://chrome:4444/wd/hub \
+          -Dcucumber.execution.parallel.enabled=true \
+          -Dcucumber.execution.parallel.config.strategy=fixed \
+          -Dcucumber.execution.parallel.config.fixed.parallelism=2 \
+          -D"cucumber.plugin=pretty, html:target/cucumber-report-chrome/index.html, json:target/cucumber-chrome.json" \
+          test
+        echo '--- Outputs (Chrome) ---'
+        ls -lah ui-tests/test-output/reports || true
+        ls -lah ui-tests/target/cucumber-report-chrome || true
+
+  test-runner-edge:
+    image: maven:3.9.6-eclipse-temurin-17
+    container_name: ui-tests-runner-edge
+    depends_on:
+      edge:
+        condition: service_healthy
+    working_dir: /workspace
+    environment:
+      - TZ=Africa/Johannesburg
+    volumes:
+      - ./:/workspace
+      - ~/.m2:/root/.m2
+    command:
+      - sh
+      - -lc
+      - |
+        set -e
+        echo '▶ Running tests on Edge Grid'
+        mvn -pl ui-tests -am \
+          -Dbrowser=edge \
+          -DgridUrl=http://edge:4444/wd/hub \
+          -Dcucumber.execution.parallel.enabled=true \
+          -Dcucumber.execution.parallel.config.strategy=fixed \
+          -Dcucumber.execution.parallel.config.fixed.parallelism=2 \
+          -D"cucumber.plugin=pretty, html:target/cucumber-report-edge/index.html, json:target/cucumber-edge.json" \
+          test
+        echo '--- Outputs (Edge) ---'
+        ls -lah ui-tests/test-output/reports || true
+        ls -lah ui-tests/target/cucumber-report-edge || true
