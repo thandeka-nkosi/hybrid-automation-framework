@@ -1,0 +1,113 @@
+# ===== Trigger on pushes to main (edit as you like) =====
+trigger:
+  branches:
+    include: [ main ]
+
+# ===== Use Microsoft-hosted Ubuntu agent =====
+pool:
+  vmImage: ubuntu-latest
+
+# ===== Handy variables =====
+variables:
+  MAVEN_CACHE_FOLDER: $(Pipeline.Workspace)/.m2
+  MODULE: ui-tests          # your test module folder name
+  EXECUTION: local          # default: local (set to 'remote' to use Selenium Grid job below)
+  BROWSER: chrome
+
+steps:
+  # ---------- Checkout ----------
+  - checkout: self
+    clean: true
+
+  # ---------- Cache Maven repo ----------
+  - task: Cache@2
+    displayName: Cache Maven dependencies
+    inputs:
+      key: 'maven | "$(Agent.OS)" | **/pom.xml'
+      restoreKeys: 'maven | "$(Agent.OS)"'
+      path: '$(MAVEN_CACHE_FOLDER)'
+
+  # ---------- Build (no tests) ----------
+  - script: |
+      mvn -q -B -Dmaven.repo.local=$(MAVEN_CACHE_FOLDER) -DskipTests clean install
+    displayName: Build project
+
+  # ---------- Run UI tests (LOCAL mode) ----------
+  - script: |
+      echo "Running module=$(MODULE) execution=$(EXECUTION) browser=$(BROWSER)"
+      mvn -q -B -Dmaven.repo.local=$(MAVEN_CACHE_FOLDER) \
+        -pl $(MODULE) -am \
+        -Dexecution=$(EXECUTION) \
+        -Dbrowser=$(BROWSER) \
+        -D"cucumber.plugin=pretty, junit:target/surefire-reports/TEST-cucumber.xml" \
+        test
+    displayName: Run UI tests (LOCAL)
+
+  # ---------- Publish JUnit results to Tests tab ----------
+  - task: PublishTestResults@2
+    displayName: Publish JUnit results
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '$(MODULE)/target/surefire-reports/TEST-*.xml'
+      failTaskOnFailedTests: false
+
+  # ---------- Publish Extent report & screenshots as artifacts ----------
+  - task: PublishPipelineArtifact@1
+    displayName: Publish Extent report
+    inputs:
+      targetPath: '$(MODULE)/test-output/reports'
+      artifact: 'extent-report'
+      publishLocation: 'pipeline'
+
+  - task: PublishPipelineArtifact@1
+    displayName: Publish screenshots
+    condition: always()          # upload even on failures
+    inputs:
+      targetPath: '$(MODULE)/screenshots'
+      artifact: 'screenshots'
+      publishLocation: 'pipeline'
+
+# ===== OPTIONAL: REMOTE mode via Selenium container (Chrome) =====
+# Use this whole job instead of the LOCAL steps above if you want Grid in CI.
+# jobs:
+# - job: grid_run
+#   displayName: Run UI tests (REMOTE via Selenium container)
+#   pool:
+#     vmImage: ubuntu-latest
+#   services:
+#     selenium:
+#       image: selenium/standalone-chrome:4.24.0
+#       ports:
+#         - 4444:4444
+#       options: --shm-size=2g
+#   steps:
+#     - checkout: self
+#     - task: Cache@2
+#       inputs:
+#         key: 'maven | "$(Agent.OS)" | **/pom.xml'
+#         restoreKeys: 'maven | "$(Agent.OS)"'
+#         path: '$(Pipeline.Workspace)/.m2'
+#     - script: |
+#         mvn -q -B -Dmaven.repo.local=$(Pipeline.Workspace)/.m2 \
+#           -pl ui-tests -am \
+#           -Dexecution=remote \
+#           -Dbrowser=chrome \
+#           -DgridUrl=http://localhost:4444/wd/hub \
+#           -D"cucumber.plugin=pretty, junit:target/surefire-reports/TEST-cucumber.xml" \
+#           test
+#       displayName: Run tests against Selenium Grid
+#     - task: PublishTestResults@2
+#       inputs:
+#         testResultsFormat: 'JUnit'
+#         testResultsFiles: 'ui-tests/target/surefire-reports/TEST-*.xml'
+#     - task: PublishPipelineArtifact@1
+#       inputs:
+#         targetPath: 'ui-tests/test-output/reports'
+#         artifact: 'extent-report'
+#         publishLocation: 'pipeline'
+#     - task: PublishPipelineArtifact@1
+#       condition: always()
+#       inputs:
+#         targetPath: 'ui-tests/screenshots'
+#         artifact: 'screenshots'
+#         publishLocation: 'pipeline'
