@@ -93,6 +93,7 @@ public class WebDriverManagerUtil {
                 d.quit();
             }
         } catch (Exception ignored) {
+
         } finally {
             DRIVER.remove();
         }

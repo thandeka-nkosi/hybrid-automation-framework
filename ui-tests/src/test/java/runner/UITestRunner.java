@@ -12,6 +12,7 @@ import static io.cucumber.junit.platform.engine.Constants.*;
 @IncludeEngines("cucumber")
 @SelectClasspathResource("features")                 // src/test/resources/features
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "stepDefinitions,core.hooks")
+
 // Let Docker/CLI pass -Dcucumber.plugin=... so Chrome/Edge write to different folders
 @ConfigurationParameter(key = PLUGIN_PUBLISH_QUIET_PROPERTY_NAME, value = "true")
 

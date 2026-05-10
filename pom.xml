@@ -11,6 +11,8 @@
     <modules>
         <module>a-core</module>
         <module>ui-tests</module>
+        <module>api-tests</module>
+        <module>perfomance-tests</module>
     </modules>
 
     <properties>

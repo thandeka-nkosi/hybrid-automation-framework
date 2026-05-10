@@ -20,6 +20,8 @@ public class SharedActions {
         this.windowHandlesList = new ArrayList<>(driver.getWindowHandles());
     }
 
+    private final By cartItemNames = By.className("inventory_item_name");
+
     /* -------------------- Window handle utils -------------------- */
 
     /**
@@ -164,6 +166,13 @@ public class SharedActions {
 
     public void jsScrollToTop() {
         ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, 0);");
+    }
+
+    public List<String> getCartItemNames() {
+        return driver.findElements(cartItemNames)
+                .stream()
+                .map(WebElement::getText)
+                .toList();
     }
 
 }

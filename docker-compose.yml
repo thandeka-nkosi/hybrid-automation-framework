@@ -42,22 +42,23 @@ services:
       - ./:/workspace
       - ~/.m2:/root/.m2
     command:
-      - sh
-      - -lc
-      - |
-        set -e
-        echo '▶ Running tests on Chrome Grid'
-        mvn -pl ui-tests -am \
-          -Dbrowser=chrome \
-          -DgridUrl=http://chrome:4444/wd/hub \
-          -Dcucumber.execution.parallel.enabled=true \
-          -Dcucumber.execution.parallel.config.strategy=fixed \
-          -Dcucumber.execution.parallel.config.fixed.parallelism=2 \
-          -D"cucumber.plugin=pretty, html:target/cucumber-report-chrome/index.html, json:target/cucumber-chrome.json" \
-          test
-        echo '--- Outputs (Chrome) ---'
-        ls -lah ui-tests/test-output/reports || true
-        ls -lah ui-tests/target/cucumber-report-chrome || true
+        - sh
+        - -lc
+        - |
+          set -e
+          echo '▶ Running tests on Chrome Grid'
+          mvn -pl ui-tests -am \
+            -Dbrowser=chrome \
+            -Dexecution=remote \
+            -DgridUrl=http://chrome:4444/wd/hub \
+            -Dcucumber.execution.parallel.enabled=true \
+            -Dcucumber.execution.parallel.config.strategy=fixed \
+            -Dcucumber.execution.parallel.config.fixed.parallelism=2 \
+            -D"cucumber.plugin=pretty,html:ui-tests/target/cucumber-report-chrome/index.html,json:ui-tests/target/cucumber-chrome.json" \
+            test
+          echo '--- Outputs (Chrome) ---'
+          ls -lah ui-tests/test-output/reports || true
+          ls -lah ui-tests/target/cucumber-report-chrome || true
 
   test-runner-edge:
     image: maven:3.9.6-eclipse-temurin-17
@@ -73,18 +74,19 @@ services:
       - ~/.m2:/root/.m2
     command:
       - sh
-      - -lc
-      - |
+        - -lc
+        - |
         set -e
         echo '▶ Running tests on Edge Grid'
         mvn -pl ui-tests -am \
-          -Dbrowser=edge \
-          -DgridUrl=http://edge:4444/wd/hub \
-          -Dcucumber.execution.parallel.enabled=true \
-          -Dcucumber.execution.parallel.config.strategy=fixed \
-          -Dcucumber.execution.parallel.config.fixed.parallelism=2 \
-          -D"cucumber.plugin=pretty, html:target/cucumber-report-edge/index.html, json:target/cucumber-edge.json" \
-          test
+        -Dbrowser=edge \
+        -Dexecution=remote \
+        -DgridUrl=http://edge:4444/wd/hub \
+        -Dcucumber.execution.parallel.enabled=true \
+        -Dcucumber.execution.parallel.config.strategy=fixed \
+        -Dcucumber.execution.parallel.config.fixed.parallelism=2 \
+        -D"cucumber.plugin=pretty,html:ui-tests/target/cucumber-report-edge/index.html,json:ui-tests/target/cucumber-edge.json" \
+        test
         echo '--- Outputs (Edge) ---'
         ls -lah ui-tests/test-output/reports || true
         ls -lah ui-tests/target/cucumber-report-edge || true

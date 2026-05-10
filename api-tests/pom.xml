@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>ui-tests</artifactId>
+    <artifactId>api-tests</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -18,75 +18,52 @@
     </properties>
 
     <dependencies>
-        <!-- shared config -->
+
         <dependency>
             <groupId>com.thandeka.automation</groupId>
             <artifactId>a-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
-        <!-- selenium + wdm -->
+        <!-- Rest Assured -->
         <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.github.bonigarcia</groupId>
-            <artifactId>webdrivermanager</artifactId>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>5.4.0</version>
+            <scope>test</scope>
         </dependency>
 
-        <!-- cucumber + junit5 engine -->
+        <!-- Cucumber Java -->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
+            <version>7.15.0</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Cucumber JUnit Platform Engine -->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-junit-platform-engine</artifactId>
+            <version>7.15.0</version>
             <scope>test</scope>
         </dependency>
 
-        <!-- junit 5 api & engine -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- assertions -->
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- lombok (for test sources too) -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-java</artifactId>
-        </dependency>
-
-
-
+        <!-- JUnit Platform Suite -->
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-suite</artifactId>
             <version>1.10.2</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- JUnit Jupiter Assertions -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.10.2</version>
-            <scope>compile</scope>
+            <scope>test</scope>
         </dependency>
-
 
     </dependencies>
 
@@ -100,7 +77,7 @@
                     <!-- cucumber on JUnit Platform -->
                     <properties>
                         <configurationParameters>
-                            cucumber.glue=steps,hooks
+                            cucumber.glue=stepDefinitions,hooks
                             cucumber.plugin=pretty, html:target/cucumber-report/index.html, json:target/cucumber.json, timeline:target/timeline
                             cucumber.publish.quiet=true
                         </configurationParameters>
@@ -109,14 +86,17 @@
                     <trimStackTrace>true</trimStackTrace>
 
                     <includes>
-                        <include>**/UITestRunner</include>
+                        <include>**/APITestRunner</include>
                     </includes>
                     <systemPropertyVariables>
-                        <moduleName>ui-tests</moduleName>
+                        <moduleName>api-tests</moduleName>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>
     </build>
 
+
 </project>
+
+

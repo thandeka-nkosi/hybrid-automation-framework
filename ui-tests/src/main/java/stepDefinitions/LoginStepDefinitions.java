@@ -11,7 +11,10 @@ import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import pages.LoginPageLocators;
+import pages.ProductsLocators;
 
 import java.net.MalformedURLException;
 import java.time.Duration;
@@ -41,8 +44,10 @@ public class LoginStepDefinitions extends BaseClass {
                 "Failed to load login page",
                 () -> {
                     driver.get(ConfigReader.getProperty("sauceDemoUrl","local"));
+                    new WebDriverWait(driver, Duration.ofSeconds(15))
+                            .until(ExpectedConditions.visibilityOfElementLocated(LoginPageLocators.usernameField));
                     driver.getPageSource().contains("Swag Labs");
-                    //Assert.assertTrue("Login page is not loaded properly.", loginActions.isOnLoginPage());
+
 
                 }
         );

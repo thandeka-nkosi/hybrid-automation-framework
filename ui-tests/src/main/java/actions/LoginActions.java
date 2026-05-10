@@ -5,13 +5,12 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.LoginPageLocators;
-
+import static pages.LoginPageLocators.*;
 import java.time.Duration;
 
 public class LoginActions {
 
     public WebDriver driver;
-    public LoginPageLocators loginPageLocators;
     WebDriverWait wait;
 
 
@@ -24,6 +23,7 @@ public class LoginActions {
     public boolean isOnLoginPage() {
         driver.switchTo().defaultContent();
         driver.switchTo().frame("display");
+        //driver.findElement(usernameField).sendKeys(); - to explore this further
 
         try {
             return driver.findElement(LoginPageLocators.usernameField).isDisplayed()

@@ -105,7 +105,8 @@ public class ExtentReportManager {
 
     public static ExtentTest getTest() { return test.get(); }
 
-    public static String getReportPath() { return reportPath; }
+    public static String getReportPath() {
+        return reportPath; }
 
     public static synchronized void flushReports() {
         if (extent != null) {
