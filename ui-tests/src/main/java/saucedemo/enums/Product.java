@@ -1,4 +1,4 @@
-package enums;
+package saucedemo.enums;
 
 import java.util.Arrays;
 

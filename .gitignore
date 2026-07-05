@@ -22,3 +22,6 @@ Thumbs.db
 *.swp
 node_modules/
 __pycache__/
+# Secrets / local config
+api-tests/src/test/resources/config/
+.env

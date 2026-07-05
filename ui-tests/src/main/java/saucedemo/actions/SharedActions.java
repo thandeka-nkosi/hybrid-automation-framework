@@ -1,4 +1,4 @@
-package actions;
+package saucedemo.actions;
 
 import core.driver.WebDriverManagerUtil;
 import org.openqa.selenium.*;

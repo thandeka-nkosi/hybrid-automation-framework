@@ -1,10 +1,10 @@
-package actions;
+package saucedemo.actions;
 
-import enums.Product;
+import saucedemo.enums.Product;
 import io.cucumber.datatable.DataTable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import pages.ProductsLocators;
+import saucedemo.pages.ProductsLocators;
 
 import java.util.List;
 

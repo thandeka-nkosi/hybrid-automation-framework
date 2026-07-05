@@ -1,11 +1,8 @@
-package Constantns;
+package saucedemo.Constantns;
 
-import actions.LoginActions;
+import saucedemo.actions.LoginActions;
 import core.driver.WebDriverManagerUtil;
-import core.utils.ConfigReader;
 import org.openqa.selenium.WebDriver;
-
-import java.net.MalformedURLException;
 
 public class BaseClass {
 

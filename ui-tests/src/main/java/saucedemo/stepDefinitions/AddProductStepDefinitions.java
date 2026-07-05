@@ -1,13 +1,11 @@
-package stepDefinitions;
+package saucedemo.stepDefinitions;
 
-import actions.CartActions;
-import actions.ProductsActions;
-import com.aventstack.extentreports.util.Assert;
+import saucedemo.actions.CartActions;
+import saucedemo.actions.ProductsActions;
 import core.driver.WebDriverManagerUtil;
 import core.utils.StepLogger;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;

@@ -1,20 +1,16 @@
-package stepDefinitions;
+package saucedemo.stepDefinitions;
 
-import Constantns.BaseClass;
-import actions.LoginActions;
+import saucedemo.Constantns.BaseClass;
+import saucedemo.actions.LoginActions;
 import core.driver.WebDriverManagerUtil;
-import core.reporting.ExtentReportManager;
 import core.utils.ConfigReader;
 import core.utils.StepLogger;
-import io.cucumber.java.Before;
-import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import pages.LoginPageLocators;
-import pages.ProductsLocators;
+import saucedemo.pages.LoginPageLocators;
 
 import java.net.MalformedURLException;
 import java.time.Duration;

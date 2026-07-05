@@ -1,9 +1,9 @@
-package actions;
+package saucedemo.actions;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import pages.ProductsLocators;
+import saucedemo.pages.ProductsLocators;
 
 import java.util.List;
 

@@ -1,11 +1,10 @@
-package actions;
+package saucedemo.actions;
 
-import core.utils.ConfigReader;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import pages.LoginPageLocators;
-import static pages.LoginPageLocators.*;
+import saucedemo.pages.LoginPageLocators;
+
 import java.time.Duration;
 
 public class LoginActions {
