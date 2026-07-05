@@ -55,8 +55,15 @@ public class WebDriverManagerUtil {
                         case "chrome":
                             WebDriverManager.chromedriver().setup();
                             ChromeOptions chromeOptions = new ChromeOptions();
+                            chromeOptions.addArguments("--headless=new");
+                            chromeOptions.addArguments("--no-sandbox");
+                            chromeOptions.addArguments("--disable-dev-shm-usage");
+                            chromeOptions.addArguments("--disable-gpu");
+                            chromeOptions.addArguments("--window-size=1920,1080");
+                            chromeOptions.addArguments("--remote-allow-origins=*");
                             createdDriver = new ChromeDriver(chromeOptions);
                             break;
+
                         case "edge":
                             WebDriverManager.edgedriver().setup();
                             EdgeOptions edgeOptions = new EdgeOptions();
